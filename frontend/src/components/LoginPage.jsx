@@ -1,17 +1,26 @@
 import React from 'react';
+import { useState } from 'react';
 import { Formik } from 'formik';
 import { Button, Card, Col, FloatingLabel, Form } from 'react-bootstrap';
-import { NavLink } from 'react-router-dom';
+import { NavLink, useNavigate } from 'react-router-dom';
 import * as Yup from 'yup';
 
-import loginImage from '../assets/login.png'
+import { useAuthContext } from '../contexts/AuthContext';
+
+import loginImage from '../assets/login.png';
 
 const LoginSchema = Yup.object().shape({
-  username: Yup.string().min(3, 'не меньше 3-х символов').required('обязательное поле'),
-  password: Yup.string().min(6, 'не меньше 6-и символов').required('обязательное поле'),  
+  username: Yup.string().required('обязательное поле'),
+  password: Yup.string().required('обязательное поле'),
+  // username: Yup.string().min(2, 'не меньше 2-х символов').required('обязательное поле'),
+  // password: Yup.string().min(2, 'не меньше 2-х символов').required('обязательное поле'),    
 });
 
-function Login() {  
+function LoginPage() {
+  const auth = useAuthContext();
+  const navigate = useNavigate();
+  const [authFailed, setAuthFailed] = useState(false);
+
   return (
     <Card className="text-center">
     <Card.Body className="row">
@@ -22,8 +31,12 @@ function Login() {
           <Formik 
             initialValues={{ username:"", password:"" }}
             validationSchema={LoginSchema}
-            onSubmit={values => {
-              console.log(values);
+            onSubmit={async (values) => {
+              const signInResult = await auth.signIn(values);
+              if (signInResult) {
+                navigate('/');
+              }
+              setAuthFailed(true);
             }}
           >
           {( {values,
@@ -47,9 +60,9 @@ function Login() {
                 onChange={handleChange}
                 onBlur={handleBlur}
                 value={values.username}
-                className={`${errors.username && touched.username ? 'is-invalid' : ''}`}
+                isInvalid={authFailed}
               />
-              {errors.username && touched.username ? <div>{errors.username}</div> : null}
+              {/* {errors.username && touched.username ? <div>{errors.username}</div> : null} */}
             </FloatingLabel>
             <FloatingLabel
               controlId="password"
@@ -63,9 +76,10 @@ function Login() {
                 onChange={handleChange}
                 onBlur={handleBlur}
                 value={values.password}
-                className={`${errors.password && touched.password ? 'is-invalid' : ''}`}
+                // className={`${errors.password && touched.password ? 'is-invalid' : ''}`}
+                isInvalid={authFailed}
               />
-              {errors.password && touched.password ? <div>{errors.password}</div> : null}
+              <Form.Control.Feedback type="invalid">Неверные имя пользователя или пароль</Form.Control.Feedback>
             </FloatingLabel>
             <Button
               variant="success"
@@ -78,7 +92,6 @@ function Login() {
           )} 
           </Formik>
         </Col>
-      {/* </Row> */}
     </Card.Body>
     <Card.Footer className="text-muted p-4">
       {'Нет аккаунта? '}
@@ -88,4 +101,4 @@ function Login() {
   );
 }
 
-export default Login;
+export default LoginPage;

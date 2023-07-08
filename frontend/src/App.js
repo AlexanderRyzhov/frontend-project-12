@@ -1,22 +1,29 @@
+// import { useState } from 'react';
 import { BrowserRouter, Routes, Route } from "react-router-dom";
+
 
 import "./App.css";
 import Layout from "./components/Layout";
-import Login from "./components/Login";
-import Main from "./components/Main";
-import NotFound from "./components/NotFound";
+import LoginPage from "./components/LoginPage";
+import MainPage from "./components/MainPage";
+import NotFoundPage from "./components/NotFoundPage";
+import RequireAuth from './components/RequireAuth';
+import { AuthProvider } from './contexts/AuthContext';
+
 
 function App() {
   return (
-    <BrowserRouter>
-      <Routes>
-        <Route path="/" element={<Layout></Layout>}>
-          <Route path="/" element={<Main></Main>} />
-          <Route path="login" element={<Login></Login>} />
-          <Route path="*" element={<NotFound></NotFound>} />
-        </Route>        
-      </Routes>
-    </BrowserRouter>
+    <AuthProvider>
+      <BrowserRouter>
+        <Routes>
+          <Route path="/" element={<Layout></Layout>}>
+            <Route path="/" element={<RequireAuth><MainPage/></RequireAuth>} />
+            <Route path="login" element={<LoginPage></LoginPage>} />
+            <Route path="*" element={<NotFoundPage></NotFoundPage>} />
+          </Route>        
+        </Routes>
+      </BrowserRouter>  
+    </AuthProvider>
   );
 }
 
