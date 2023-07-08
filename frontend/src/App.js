@@ -1,30 +1,26 @@
 // import { useState } from 'react';
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
 
+import './App.css';
+import Layout from './components/Layout.jsx';
+import LoginPage from './components/LoginPage.jsx';
+import MainPage from './components/MainPage.jsx';
+import NotFoundPage from './components/NotFoundPage.jsx';
+import RequireAuth from './components/RequireAuth.jsx';
+import { AuthProvider } from './contexts/AuthContext.jsx';
 
-import "./App.css";
-import Layout from "./components/Layout";
-import LoginPage from "./components/LoginPage";
-import MainPage from "./components/MainPage";
-import NotFoundPage from "./components/NotFoundPage";
-import RequireAuth from './components/RequireAuth';
-import { AuthProvider } from './contexts/AuthContext';
-
-
-function App() {
-  return (
-    <AuthProvider>
-      <BrowserRouter>
-        <Routes>
-          <Route path="/" element={<Layout></Layout>}>
-            <Route path="/" element={<RequireAuth><MainPage/></RequireAuth>} />
-            <Route path="login" element={<LoginPage></LoginPage>} />
-            <Route path="*" element={<NotFoundPage></NotFoundPage>} />
-          </Route>        
-        </Routes>
-      </BrowserRouter>  
-    </AuthProvider>
-  );
-}
+const App = () => (
+  <AuthProvider>
+    <BrowserRouter>
+      <Routes>
+        <Route path="/" element={<Layout />}>
+          <Route path="/" element={<RequireAuth><MainPage /></RequireAuth>} />
+          <Route path="login" element={<LoginPage />} />
+          <Route path="*" element={<NotFoundPage />} />
+        </Route>
+      </Routes>
+    </BrowserRouter>
+  </AuthProvider>
+);
 
 export default App;

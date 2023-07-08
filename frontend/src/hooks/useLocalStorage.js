@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect } from 'react';
 
 function getStorageValue(key, defaultValue) {
   const saved = localStorage.getItem(key);
@@ -6,14 +6,13 @@ function getStorageValue(key, defaultValue) {
   return initial || defaultValue;
 }
 
-export const useLocalStorage = (key, defaultValue='') => {
-  const [value, setValue] = useState(() => {
-    return getStorageValue(key, defaultValue);
-  });
+const useLocalStorage = (key, defaultValue = '') => {
+  const [value, setValue] = useState(() => getStorageValue(key, defaultValue));
 
-  useEffect(() => {
-    localStorage.setItem(key, JSON.stringify(value));
-  }, [key, value]);
+  // eslint-disable-next-line functional/no-expression-statements
+  useEffect(() => localStorage.setItem(key, JSON.stringify(value)), [key, value]);
 
   return [value, setValue];
 };
+
+export default useLocalStorage;
