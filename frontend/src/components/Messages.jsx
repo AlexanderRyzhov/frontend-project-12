@@ -13,6 +13,9 @@ const Messages = () => {
   const currentChannel = useSelector((state) => (
     state.channels.entities[state.channels.currentChannelId]));
 
+  const user = JSON.parse(localStorage.getItem('user'));
+  const username = user?.username;
+
   return (currentChannel)
     ? (
       <Col className="p-0 h-100">
@@ -26,7 +29,7 @@ const Messages = () => {
               <Message key={message.id} message={message} />
             ))}
           </div>
-          <NewMessageForm />
+          <NewMessageForm channelId={currentChannel.id} username={username} />
         </div>
       </Col>
     )

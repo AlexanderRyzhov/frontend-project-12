@@ -2,11 +2,15 @@ import axios from 'axios';
 import { useEffect } from 'react';
 import { useDispatch } from 'react-redux';
 import { Container, Row } from 'react-bootstrap';
+import { toast, ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+
 import routes from '../routes';
 import { setChannels, setCurrentChannelId } from '../slices/channelsSlice';
-import { setMessages } from '../slices/messagesSlice';
+import { setMessages, addMessage } from '../slices/messagesSlice';
 import Channels from './Channels';
 import Messages from './Messages';
+import socket from '../socket';
 
 const getAuthHeader = () => {
   const user = JSON.parse(localStorage.getItem('user'));
@@ -20,43 +24,8 @@ const getNormalized = ({ channels, messages, currentChannelId }) => {
   const channelsEntities = channels.reduce((acc, item) => ({ ...acc, [item.id]: item }), {});
   const channelsIds = channels.map((item) => item.id);
 
-  const fakeMessages = [
-    {
-      body: '1',
-      channelId: 1,
-      username: 'admin',
-      id: 1,
-    },
-    {
-      body: '2',
-      channelId: 1,
-      username: 'admin',
-      id: 2,
-    },
-    {
-      body: '3',
-      channelId: 1,
-      username: 'admin',
-      id: 3,
-    },
-    {
-      body: '555',
-      channelId: 2,
-      username: 'admin',
-      id: 4,
-    },
-    {
-      body: '8888',
-      channelId: 2,
-      username: 'admin',
-      id: 5,
-    },
-  ];
-
-  const messagesEntities = [...fakeMessages, ...messages]
-    .reduce((acc, item) => ({ ...acc, [item.id]: item }), {});
-  const messagesIds = [...fakeMessages, ...messages]
-    .map((item) => item.id);
+  const messagesEntities = messages.reduce((acc, item) => ({ ...acc, [item.id]: item }), {});
+  const messagesIds = messages.map((item) => item.id);
 
   return {
     channels: {
@@ -92,11 +61,37 @@ const MainPage = () => {
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
+  useEffect(() => {
+    function onConnect() {
+      toast.success('связь с сервером установлена');
+    }
+
+    function onDisconnect() {
+      toast.error('связь с сервером потеряна');
+    }
+
+    function onNewMessageEvent(message) {
+      dispatch(addMessage({ message }));
+    }
+
+    socket.on('connect', onConnect);
+    socket.on('disconnect', onDisconnect);
+    socket.on('newMessage', onNewMessageEvent);
+
+    return () => {
+      socket.off('connect', onConnect);
+      socket.off('disconnect', onDisconnect);
+      socket.off('newMessage', onNewMessageEvent);
+    };
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
   return (
     <Container className="h-100 my-4 overflow-hidden rounded shadow">
       <Row className="h-100 bg-white flex-md-row">
         <Channels />
         <Messages />
+        <ToastContainer />
       </Row>
     </Container>
   );
