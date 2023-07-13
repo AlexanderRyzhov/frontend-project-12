@@ -13,10 +13,10 @@ const Channel = ({ channel, currentChannel }) => {
           onClick={() => (dispatch(setCurrentChannelId(channel.id)))}
           className="w-100 rounded-0 text-start"
         >
-          {channel.name}
+          {`# ${channel.name}`}
         </Button>
         {/* {channel.removable */}
-        { channel.id === 1
+        { channel.removable
           ? (
             <>
               <Dropdown.Toggle split variant={buttonVariant} className="rounded-0" />
