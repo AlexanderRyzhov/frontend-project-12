@@ -19,16 +19,20 @@ const renderModal = (modalInfo, hideModal, channels) => {
 };
 
 const Channels = () => {
-  const [modalInfo, setModalInfo] = useState({ type: null, item: null });
-  const showModal = (type, item = null) => setModalInfo({ type, item });
-  const hideModal = () => setModalInfo({ type: null, item: null });
+  const [modalInfo, setModalInfo] = useState({ type: null, channel: null });
+  const showModal = (type, channel = null) => {
+    setModalInfo({ type, channel });
+  };
+  const hideModal = () => setModalInfo({ type: null, channel: null });
 
   const channels = useSelector((state) => {
     const allChannels = state.channels.ids.map((id) => state.channels.entities[id]);
     return allChannels;
   });
-  const currentChannel = useSelector((state) => (
-    state.channels.entities[state.channels.currentChannelId]));
+  const currentChannel = useSelector((state) => {
+    const id = state.uiState.currentChannelId || state.uiState.defaultChannelId;
+    return state.channels.entities[id];
+  });
 
   return (
     <Col xs={4} md={2} className="border-end px-0 bg-light flex-column h-100 d-flex">
@@ -42,7 +46,12 @@ const Channels = () => {
       </div>
       <ul id="channels-box" className="nav flex-column nav-pills nav-fill px-2 mb-3 overflow-auto h-100 d-block">
         {channels.map((channel) => (
-          <Channel key={channel.id} channel={channel} currentChannel={currentChannel} />
+          <Channel
+            key={channel.id}
+            channel={channel}
+            currentChannel={currentChannel}
+            showModal={showModal}
+          />
         ))}
       </ul>
       {renderModal(modalInfo, hideModal, channels)}

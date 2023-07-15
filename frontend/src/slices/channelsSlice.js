@@ -1,44 +1,27 @@
 /* eslint-disable no-param-reassign */
-import { createSlice } from '@reduxjs/toolkit';
+import { createSlice, createEntityAdapter } from '@reduxjs/toolkit';
 
-// Начальное значение
-const initialState = {
-  ids: [],
-  entities: {},
-  currentChannelId: null,
-};
+const channelsAdapter = createEntityAdapter();
+const initialState = channelsAdapter.getInitialState();
 
 const channelsSlice = createSlice({
-  name: 'channel',
+  name: 'channels',
   initialState,
-  // Редьюсеры в слайсах мутируют состояние и ничего не возвращают наружу
   reducers: {
-    setCurrentChannelId(state, action) {
-      const currentChannelId = action.payload;
-      state.currentChannelId = currentChannelId;
-    },
-    setChannels(state, action) {
-      const { entities, ids } = action.payload;
-      state.entities = entities;
-      state.ids = ids;
-    },
-    addChannel(state, action) {
-      const { channel } = action.payload;
-      state.entities[channel.id] = channel;
-      state.ids.push(channel.id);
-    },
-    removeChannel(state, action) {
-      const { channelId } = action.payload;
-      delete state.entities[channelId];
-      state.ids = state.ids.filter((id) => id !== channelId);
-    },
+    setChannels: channelsAdapter.setAll,
+    addChannel: channelsAdapter.addOne,
+    removeChannel: channelsAdapter.removeOne,
+    renameChannel: channelsAdapter.updateOne,
   },
 });
 
 // Слайс генерирует действия, которые экспортируются отдельно
 // Действия генерируются автоматически из имен ключей редьюсеров
 export const {
-  setChannels, addChannel, removeChannel, setCurrentChannelId,
+  setChannels,
+  addChannel,
+  removeChannel,
+  renameChannel,
 } = channelsSlice.actions;
 
 // По умолчанию экспортируется редьюсер, сгенерированный слайсом

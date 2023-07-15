@@ -6,7 +6,10 @@ import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
 import routes from '../routes';
-import { setChannels, setCurrentChannelId } from '../slices/channelsSlice';
+import {
+  setChannels, addChannel, removeChannel, renameChannel,
+} from '../slices/channelsSlice';
+import { setDefaultChannelId } from '../slices/uiStateSlice';
 import { setMessages, addMessage } from '../slices/messagesSlice';
 import Channels from './Channels';
 import Messages from './Messages';
@@ -20,26 +23,6 @@ const getAuthHeader = () => {
   return {};
 };
 
-const getNormalized = ({ channels, messages, currentChannelId }) => {
-  const channelsEntities = channels.reduce((acc, item) => ({ ...acc, [item.id]: item }), {});
-  const channelsIds = channels.map((item) => item.id);
-
-  const messagesEntities = messages.reduce((acc, item) => ({ ...acc, [item.id]: item }), {});
-  const messagesIds = messages.map((item) => item.id);
-
-  return {
-    channels: {
-      entities: channelsEntities,
-      ids: channelsIds,
-    },
-    messages: {
-      entities: messagesEntities,
-      ids: messagesIds,
-    },
-    currentChannelId,
-  };
-};
-
 const MainPage = () => {
   const dispatch = useDispatch();
   useEffect(() => {
@@ -49,9 +32,9 @@ const MainPage = () => {
           headers: getAuthHeader(),
         };
         const { data } = await axios.get(routes.getData(), config);
-        const { channels, messages, currentChannelId } = getNormalized(data);
+        const { channels, messages, currentChannelId } = data;
         dispatch(setChannels(channels));
-        dispatch(setCurrentChannelId(currentChannelId));
+        dispatch(setDefaultChannelId(currentChannelId));
         dispatch(setMessages(messages));
       } catch (error) {
         console.log(error);
@@ -71,17 +54,38 @@ const MainPage = () => {
     }
 
     function onNewMessageEvent(message) {
-      dispatch(addMessage({ message }));
+      dispatch(addMessage(message));
+    }
+
+    function onNewChannelEvent(channel) {
+      dispatch(addChannel(channel));
+    }
+
+    function onRemoveChannelEvent(channel) {
+      const { id } = channel;
+      dispatch(removeChannel(id));
+    }
+
+    function onRenameChannelEvent(channel) {
+      const { id } = channel;
+      const changes = channel;
+      dispatch(renameChannel({ id, changes }));
     }
 
     socket.on('connect', onConnect);
     socket.on('disconnect', onDisconnect);
     socket.on('newMessage', onNewMessageEvent);
+    socket.on('newChannel', onNewChannelEvent);
+    socket.on('removeChannel', onRemoveChannelEvent);
+    socket.on('renameChannel', onRenameChannelEvent);
 
     return () => {
       socket.off('connect', onConnect);
       socket.off('disconnect', onDisconnect);
       socket.off('newMessage', onNewMessageEvent);
+      socket.off('newChannel', onNewChannelEvent);
+      socket.off('removeChannel', onRemoveChannelEvent);
+      socket.off('renameChannel', onRenameChannelEvent);
     };
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);

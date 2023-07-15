@@ -5,13 +5,16 @@ import Message from './Message';
 import NewMessageForm from './NewMessageForm';
 
 const Messages = () => {
+  const currentChannelId = useSelector((state) => state.uiState.currentChannelId || state.uiState.defaultChannelId);
+
   const messages = useSelector((state) => {
     const allMessages = state.messages.ids.map((id) => state.messages.entities[id]);
-    const filteredMessages = allMessages.filter(({ channelId }) => channelId === state.channels.currentChannelId);
-    return filteredMessages;
+    return allMessages.filter(({ channelId }) => channelId === currentChannelId);
   });
+
   const currentChannel = useSelector((state) => (
-    state.channels.entities[state.channels.currentChannelId]));
+    state.channels.entities[currentChannelId]
+  ));
 
   const user = JSON.parse(localStorage.getItem('user'));
   const username = user?.username;
