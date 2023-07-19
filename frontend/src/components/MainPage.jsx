@@ -2,7 +2,7 @@ import axios from 'axios';
 import { useEffect } from 'react';
 import { useDispatch } from 'react-redux';
 import { Container, Row } from 'react-bootstrap';
-import { toast, ToastContainer } from 'react-toastify';
+import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
 import routes from '../routes';
@@ -95,7 +95,6 @@ const MainPage = () => {
       <Row className="h-100 bg-white flex-md-row">
         <Channels />
         <Messages />
-        <ToastContainer />
       </Row>
     </Container>
   );

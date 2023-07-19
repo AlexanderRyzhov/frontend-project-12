@@ -8,6 +8,7 @@ import LoginPage from './components/LoginPage.jsx';
 import MainPage from './components/MainPage.jsx';
 import NotFoundPage from './components/NotFoundPage.jsx';
 import RequireAuth from './components/RequireAuth.jsx';
+import SignupPage from './components/SignupPage';
 import { AuthProvider } from './contexts/AuthContext.jsx';
 import store from './slices/index.js';
 
@@ -19,6 +20,7 @@ const App = () => (
           <Route path="/" element={<Layout />}>
             <Route path="/" element={<RequireAuth><MainPage /></RequireAuth>} />
             <Route path="login" element={<LoginPage />} />
+            <Route path="signup" element={<SignupPage />} />
             <Route path="*" element={<NotFoundPage />} />
           </Route>
         </Routes>

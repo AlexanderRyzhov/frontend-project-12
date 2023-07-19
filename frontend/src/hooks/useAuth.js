@@ -17,13 +17,10 @@ const useAuth = () => {
   };
 
   const signUp = async (data) => {
-    try {
-      const response = await axios.post('/api/auth/signup', data);
-      const userData = response.data;
-      return setUser(userData);
-    } catch (err) {
-      return console.error(err);
-    }
+    const response = await axios.post(routes.signupPath(), data);
+    const userData = response.data;
+    setUser(userData);
+    return userData;
   };
 
   const signOut = () => setUser(null);
