@@ -1,9 +1,11 @@
-import React, { useState } from 'react';
+import axios from 'axios';
+import { useState } from 'react';
 import { Formik } from 'formik';
 import {
   Button, Card, Col, Container, FloatingLabel, Form, Row,
 } from 'react-bootstrap';
 import { NavLink, useNavigate } from 'react-router-dom';
+import { toast } from 'react-toastify';
 import { useTranslation } from 'react-i18next';
 import * as Yup from 'yup';
 
@@ -36,11 +38,19 @@ const LoginPage = () => {
                   initialValues={{ username: '', password: '' }}
                   validationSchema={LoginSchema}
                   onSubmit={async (values) => {
-                    const signInResult = await auth.signIn(values);
-                    if (signInResult) {
+                    try {
+                      await auth.signIn(values);
                       return navigate('/');
+                    } catch (error) {
+                      if (axios.isAxiosError(error)) {
+                        const { code, response } = error;
+                        if (response?.status === 401) {
+                          return setAuthFailed(true);
+                        }
+                        return toast.error(t('loginPage.networkError', { code }));
+                      }
+                      throw error;
                     }
-                    return setAuthFailed(true);
                   }}
                 >
                   {({

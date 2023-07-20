@@ -6,6 +6,7 @@ import { toast } from 'react-toastify';
 import { useTranslation } from 'react-i18next';
 import 'react-toastify/dist/ReactToastify.css';
 
+import { useAuthContext } from '../contexts/AuthContext';
 import routes from '../routes';
 import {
   setChannels, addChannel, removeChannel, renameChannel,
@@ -16,8 +17,7 @@ import Channels from './Channels';
 import Messages from './Messages';
 import socket from '../socket';
 
-const getAuthHeader = () => {
-  const user = JSON.parse(localStorage.getItem('user'));
+const getAuthHeader = (user) => {
   if (user && user.token) {
     return { Authorization: `Bearer ${user.token}` };
   }
@@ -25,13 +25,14 @@ const getAuthHeader = () => {
 };
 
 const MainPage = () => {
+  const { user } = useAuthContext();
   const { t } = useTranslation();
   const dispatch = useDispatch();
   useEffect(() => {
     const fetchData = async () => {
       try {
         const config = {
-          headers: getAuthHeader(),
+          headers: getAuthHeader(user),
         };
         const { data } = await axios.get(routes.getData(), config);
         const { channels, messages, currentChannelId } = data;
@@ -40,6 +41,7 @@ const MainPage = () => {
         dispatch(setMessages(messages));
       } catch (error) {
         console.log(error);
+        toast.error(t('mainPage.fetchDataError'));
       }
     };
     fetchData();
@@ -52,7 +54,7 @@ const MainPage = () => {
     }
 
     function onDisconnect() {
-      toast.success(t('mainPage.onDisconnect'));
+      toast.error(t('mainPage.onDisconnect'));
     }
 
     function onNewMessageEvent(message) {

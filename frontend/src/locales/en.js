@@ -3,6 +3,7 @@ export default {
     mainPage: {
       onConnect: 'soket is connected',
       onDisconnect: 'socket is disconnected',
+      fetchDataError: 'error ocured during fetch data',
     },
     channel: {
       remove: 'Remove',
@@ -24,6 +25,7 @@ export default {
       password: 'Password',
       noAccountQuestion: 'No account? ',
       signup: 'Sign up',
+      networkError: 'Network error, error code: {{code}}',
     },
     messages: {
       messages_zero: 'no messges',

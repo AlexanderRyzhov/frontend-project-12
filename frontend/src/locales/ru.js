@@ -3,6 +3,7 @@ export default {
     mainPage: {
       onConnect: 'связь с сервером установлена',
       onDisconnect: 'связь с сервером потеряна',
+      fetchDataError: 'возникла ошибка при загрузке данных',
     },
     channel: {
       remove: 'Удалить',
@@ -24,6 +25,7 @@ export default {
       password: 'Пароль',
       noAccountQuestion: 'Нет аккаунта? ',
       signup: 'Регистрация',
+      networkError: 'Ошибка сети, код ошибки: {{code}}',
     },
     messages: {
       messages_zero: 'нет сообщений',

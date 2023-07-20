@@ -6,14 +6,10 @@ const useAuth = () => {
   const [user, setUser] = useLocalStorage('user', null);
 
   const signIn = async (data) => {
-    try {
-      const response = await axios.post(routes.loginPath(), data);
-      const userData = response.data;
-      setUser(userData);
-      return userData;
-    } catch (err) {
-      return console.error(err);
-    }
+    const response = await axios.post(routes.loginPath(), data);
+    const userData = response.data;
+    setUser(userData);
+    return userData;
   };
 
   const signUp = async (data) => {
