@@ -5,28 +5,28 @@ import {
 } from 'react-bootstrap';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
+import { useTranslation } from 'react-i18next';
 import * as Yup from 'yup';
 
 import { useAuthContext } from '../contexts/AuthContext';
-
 import signupImage from '../assets/signup.png';
 
 const SignupSchema = Yup.object().shape({
   username: Yup.string()
-    .notOneOf([Yup.ref('busyName')], 'Такой пользователь уже существует')
-    .min(3, 'не меньше 3-х символов')
-    .max(20, 'не более 20 символов')
-    .required('обязательное поле'),
+    .notOneOf([Yup.ref('busyName')], 'signupPage.validation.notUniqueUser')
+    .min(3, 'signupPage.validation.min3')
+    .max(20, 'signupPage.validation.max20')
+    .required('signupPage.validation.required'),
   password: Yup.string()
-    // .matches(/(^admin$)|(^.{6,}$)/, 'не меньше 6 символов')
-    .min(6, 'не меньше 6 символов')
-    .required('обязательное поле'),
+    .min(6, 'signupPage.validation.min6')
+    .required('signupPage.validation.required'),
   passwordConfirmation: Yup.string()
-    .oneOf([Yup.ref('password'), null], 'Passwords must match')
-    .required('обязательное поле'),
+    .oneOf([Yup.ref('password'), null], 'signupPage.validation.mustMatch')
+    .required('signupPage.validation.required'),
 });
 
 const SignupPage = () => {
+  const { t } = useTranslation();
   const auth = useAuthContext();
   const navigate = useNavigate();
 
@@ -51,17 +51,14 @@ const SignupPage = () => {
                   onSubmit={async (values, { setFieldValue }) => {
                     try {
                       await auth.signUp(values);
-                      // const signUpResult = await auth.signUp(values);
-                      // if (signUpResult) {
                       return navigate('/');
-                      // }
                     } catch (error) {
                       if (axios.isAxiosError(error)) {
                         const { code, response } = error;
                         if (response?.status === 409) {
                           return setFieldValue('busyName', values.username);
                         }
-                        return toast.error(`axios error, code = ${code}`);
+                        return toast.error(t('signupPage.networkError', { code }));
                       }
                       throw error;
                     }
@@ -77,15 +74,15 @@ const SignupPage = () => {
                     isSubmitting,
                   }) => (
                     <Form onSubmit={handleSubmit}>
-                      <h1 className="text-center mb-4">Регистрация</h1>
+                      <h1 className="text-center mb-4">{t('signupPage.signupCaption')}</h1>
                       <FloatingLabel
                         controlId="username"
-                        label="Имя пользователя"
+                        label={t('signupPage.username')}
                         className="mb-3 mt-3"
                       >
                         <Form.Control
                           type="text"
-                          placeholder="Логин"
+                          placeholder={t('signupPage.username')}
                           onChange={handleChange}
                           onBlur={handleBlur}
                           value={values.username}
@@ -93,16 +90,16 @@ const SignupPage = () => {
                           disabled={isSubmitting}
                         />
                         {((errors.username && touched.username))
-                          && <Form.Control.Feedback type="invalid">{errors.username}</Form.Control.Feedback>}
+                          && <Form.Control.Feedback type="invalid">{t(errors.username)}</Form.Control.Feedback>}
                       </FloatingLabel>
                       <FloatingLabel
                         controlId="password"
-                        label="Пароль"
+                        label={t('signupPage.password')}
                         className="mb-3 mt-3"
                       >
                         <Form.Control
                           type="password"
-                          placeholder="Пароль"
+                          placeholder={t('signupPage.password')}
                           onChange={handleChange}
                           onBlur={handleBlur}
                           value={values.password}
@@ -110,16 +107,16 @@ const SignupPage = () => {
                           disabled={isSubmitting}
                         />
                         {errors.password && touched.password
-                          && <Form.Control.Feedback type="invalid">{errors.password}</Form.Control.Feedback>}
+                          && <Form.Control.Feedback type="invalid">{t(errors.password)}</Form.Control.Feedback>}
                       </FloatingLabel>
                       <FloatingLabel
                         controlId="passwordConfirmation"
-                        label="Повторите пароль"
+                        label={t('signupPage.passwordConfirmation')}
                         className="mb-3 mt-3"
                       >
                         <Form.Control
                           type="password"
-                          placeholder="Пароль"
+                          placeholder={t('signupPage.passwordConfirmation')}
                           onChange={handleChange}
                           onBlur={handleBlur}
                           value={values.passwordConfirmation}
@@ -127,16 +124,15 @@ const SignupPage = () => {
                           disabled={isSubmitting}
                         />
                         {errors.passwordConfirmation && touched.passwordConfirmation
-                          && <Form.Control.Feedback type="invalid">{errors.passwordConfirmation}</Form.Control.Feedback>}
+                          && <Form.Control.Feedback type="invalid">{t(errors.passwordConfirmation)}</Form.Control.Feedback>}
                       </FloatingLabel>
                       <Button
                         variant="success"
                         as="input"
                         type="submit"
                         className="w-100 mb-3"
-                        value="Войти"
+                        value={t('signupPage.signupButton')}
                       />
-                      <Form.Control.Feedback type="invalid">button error</Form.Control.Feedback>
                     </Form>
                   )}
                 </Formik>

@@ -5,10 +5,12 @@ import {
 } from 'react-bootstrap';
 import { toast } from 'react-toastify';
 import { useDispatch } from 'react-redux';
+import { useTranslation } from 'react-i18next';
 import { setMyChannelId } from '../../slices/uiStateSlice';
 import socket from '../../socket';
 
 const Add = ({ hideModal, channels }) => {
+  const { t } = useTranslation();
   const dispatch = useDispatch();
   const inputRef = useRef(null);
   useEffect(() => {
@@ -18,16 +20,15 @@ const Add = ({ hideModal, channels }) => {
   return (
     <Formik
       validateOnBlur={false}
-      // validateOnChange={false}
       initialValues={{ name: '' }}
       validate={(values) => {
         const errors = {};
         if (!values.name) {
-          errors.name = 'Укажите имя канала';
+          errors.name = 'modals.add.validation.required';
         } else {
           const index = channels.findIndex((channel) => (channel.name === values.name));
           if (index >= 0) {
-            errors.name = 'Данное имя канала уже занято';
+            errors.name = 'modals.add.validation.notUniqueName';
           }
         }
         return errors;
@@ -37,11 +38,11 @@ const Add = ({ hideModal, channels }) => {
         const channel = { name };
         socket.timeout(sendMessageTimeout).emit('newChannel', channel, (err, response) => {
           if (err) {
-            toast.error('не удалось создать канал');
+            toast.error(t('modals.add.addChannelError'));
             setSubmitting(false);
           } else {
             const { data } = response;
-            toast.success('новый канал создан');
+            toast.success(t('modals.add.addChannelSuccess'));
             dispatch(setMyChannelId(data.id));
             hideModal();
           }
@@ -59,7 +60,7 @@ const Add = ({ hideModal, channels }) => {
       }) => (
         <Modal show centered onHide={hideModal}>
           <Modal.Header closeButton>
-            <Modal.Title>Новый канал</Modal.Title>
+            <Modal.Title>{t('modals.add.title')}</Modal.Title>
           </Modal.Header>
           <Modal.Body>
             <form onSubmit={handleSubmit}>
@@ -69,7 +70,7 @@ const Add = ({ hideModal, channels }) => {
                   name="name"
                   id="name"
                   type="text"
-                  placeholder="Имя канала"
+                  placeholder={t('modals.add.name')}
                   onChange={handleChange}
                   onBlur={handleBlur}
                   value={values.name}
@@ -78,17 +79,17 @@ const Add = ({ hideModal, channels }) => {
                   isInvalid={touched.name && errors.name}
                 />
                 {errors.name && touched.name
-              && <FormControl.Feedback type="invalid">{errors.name}</FormControl.Feedback>}
+              && <FormControl.Feedback type="invalid">{t(errors.name)}</FormControl.Feedback>}
                 <div className="d-flex justify-content-end">
                   <Button variant="secondary" type="button" onClick={hideModal} className="me-2">
-                    отменить
+                    {t('modals.add.cancel')}
                   </Button>
                   <Button
                     variant="primary"
                     type="submit"
                     disabled={isSubmitting || (errors.name && touched.name)}
                   >
-                    отправить
+                    {t('modals.add.add')}
                   </Button>
                 </div>
               </FormGroup>

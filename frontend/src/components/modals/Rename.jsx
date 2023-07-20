@@ -4,9 +4,11 @@ import {
   Modal, FormGroup, FormControl, Button,
 } from 'react-bootstrap';
 import { toast } from 'react-toastify';
+import { useTranslation } from 'react-i18next';
 import socket from '../../socket';
 
 const Rename = ({ hideModal, channels, modalInfo }) => {
+  const { t } = useTranslation();
   const { channel } = modalInfo;
   const inputRef = useRef(null);
   useEffect(() => {
@@ -16,14 +18,15 @@ const Rename = ({ hideModal, channels, modalInfo }) => {
   return (
     <Formik
       initialValues={{ name: channel.name }}
+      validateOnBlur={false}
       validate={(values) => {
         const errors = {};
         if (!values.name) {
-          errors.name = 'Укажите имя канала';
+          errors.name = 'modals.rename.validation.required';
         } else {
           const index = channels.findIndex((item) => (item.name === values.name));
           if (index >= 0) {
-            errors.name = 'Данное имя канала уже занято';
+            errors.name = 'modals.rename.validation.notUniqueName';
           }
         }
         return errors;
@@ -33,10 +36,10 @@ const Rename = ({ hideModal, channels, modalInfo }) => {
         const modifiedChannel = { id: channel.id, name };
         socket.timeout(sendMessageTimeout).emit('renameChannel', modifiedChannel, (err) => {
           if (err) {
-            toast.error('не удалось переименовать канал');
+            toast.error(t('modals.rename.renameChannelError'));
             setSubmitting(false);
           } else {
-            toast.success('канал успешно переименован');
+            toast.success(t('modals.rename.renameChannelSuccess'));
             hideModal();
           }
         });
@@ -47,13 +50,13 @@ const Rename = ({ hideModal, channels, modalInfo }) => {
         errors,
         touched,
         handleChange,
-        // handleBlur,
+        handleBlur,
         handleSubmit,
         isSubmitting,
       }) => (
         <Modal show centered onHide={hideModal}>
           <Modal.Header closeButton>
-            <Modal.Title>Переименование канала</Modal.Title>
+            <Modal.Title>{t('modals.rename.title')}</Modal.Title>
           </Modal.Header>
           <Modal.Body>
             <form onSubmit={handleSubmit}>
@@ -63,25 +66,26 @@ const Rename = ({ hideModal, channels, modalInfo }) => {
                   name="name"
                   id="name"
                   type="text"
-                  placeholder="Имя канала"
+                  placeholder={t('modals.rename.name')}
                   onChange={handleChange}
+                  onBlur={handleBlur}
                   value={values.name}
                   className="mb-2"
                   disabled={isSubmitting}
                   isInvalid={touched.name && errors.name}
                 />
                 {errors.name && touched.name
-              && <FormControl.Feedback type="invalid">{errors.name}</FormControl.Feedback>}
+              && <FormControl.Feedback type="invalid">{t(errors.name)}</FormControl.Feedback>}
                 <div className="d-flex justify-content-end">
                   <Button variant="secondary" type="button" onClick={hideModal} className="me-2">
-                    отменить
+                    {t('modals.rename.cancel')}
                   </Button>
                   <Button
                     variant="primary"
                     type="submit"
                     disabled={isSubmitting || (errors.name && touched.name)}
                   >
-                    отправить
+                    {t('modals.rename.rename')}
                   </Button>
                 </div>
               </FormGroup>

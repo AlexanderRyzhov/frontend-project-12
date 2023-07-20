@@ -4,6 +4,7 @@ import {
   Button, Card, Col, Container, FloatingLabel, Form, Row,
 } from 'react-bootstrap';
 import { NavLink, useNavigate } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import * as Yup from 'yup';
 
 import { useAuthContext } from '../contexts/AuthContext';
@@ -11,13 +12,12 @@ import { useAuthContext } from '../contexts/AuthContext';
 import loginImage from '../assets/login.png';
 
 const LoginSchema = Yup.object().shape({
-  username: Yup.string().required('обязательное поле'),
-  password: Yup.string().required('обязательное поле'),
-  // username: Yup.string().min(2, 'не меньше 2-х символов').required('обязательное поле'),
-  // password: Yup.string().min(2, 'не меньше 2-х символов').required('обязательное поле'),
+  username: Yup.string().required('loginPage.validation.required'),
+  password: Yup.string().required('loginPage.validation.required'),
 });
 
 const LoginPage = () => {
+  const { t } = useTranslation();
   const auth = useAuthContext();
   const navigate = useNavigate();
   const [authFailed, setAuthFailed] = useState(false);
@@ -45,55 +45,57 @@ const LoginPage = () => {
                 >
                   {({
                     values,
-                    // errors,
-                    // touched,
+                    errors,
+                    touched,
                     handleChange,
                     handleBlur,
                     handleSubmit,
-                  // isSubmitting,
+                    isSubmitting,
                   }) => (
                     <Form onSubmit={handleSubmit}>
-                      <h1 className="text-center mb-4">Войти</h1>
+                      <h1 className="text-center mb-4">{t('loginPage.login')}</h1>
                       <FloatingLabel
                         controlId="username"
-                        label="Логин"
+                        label={t('loginPage.username')}
                         className="mb-3 mt-3"
                       >
                         <Form.Control
                           type="text"
-                          placeholder="Логин"
-                          required
+                          placeholder={t('loginPage.username')}
                           onChange={handleChange}
                           onBlur={handleBlur}
                           value={values.username}
-                          isInvalid={authFailed}
+                          isInvalid={(touched.username && errors.username) || authFailed}
+                          disabled={isSubmitting}
                         />
-                        {/* {errors.username && touched.username
-                    ? <div>{errors.username}</div> : null} */}
+                        {((errors.username && touched.username))
+                          && <Form.Control.Feedback type="invalid">{t(errors.username)}</Form.Control.Feedback>}
                       </FloatingLabel>
                       <FloatingLabel
                         controlId="password"
-                        label="Пароль"
+                        label={t('loginPage.password')}
                         className="mb-3 mt-3"
                       >
                         <Form.Control
                           type="password"
-                          placeholder="Пароль"
-                          required
+                          placeholder={t('loginPage.password')}
                           onChange={handleChange}
                           onBlur={handleBlur}
                           value={values.password}
-                // className={`${errors.password && touched.password ? 'is-invalid' : ''}`}
-                          isInvalid={authFailed}
+                          isInvalid={(touched.password && errors.password) || authFailed}
+                          disabled={isSubmitting}
                         />
-                        <Form.Control.Feedback type="invalid">Неверные имя пользователя или пароль</Form.Control.Feedback>
+                        {((errors.password && touched.password))
+                          && <Form.Control.Feedback type="invalid">{t(errors.password)}</Form.Control.Feedback>}
+                        <Form.Control.Feedback type="invalid">{authFailed ? t('loginPage.wrongCredentials') : ''}</Form.Control.Feedback>
                       </FloatingLabel>
                       <Button
                         variant="success"
                         as="input"
                         type="submit"
                         className="w-100 mb-3"
-                        value="Войти"
+                        value={t('loginPage.login')}
+                        disabled={isSubmitting}
                       />
                     </Form>
                   )}
@@ -101,8 +103,8 @@ const LoginPage = () => {
               </Col>
             </Card.Body>
             <Card.Footer className="text-muted p-4">
-              {'Нет аккаунта? '}
-              <NavLink to="/signup"> Регистрация</NavLink>
+              {t('loginPage.noAccountQuestion')}
+              <NavLink to="/signup">{t('loginPage.signup')}</NavLink>
             </Card.Footer>
           </Card>
         </Col>

@@ -3,6 +3,7 @@ import { useEffect } from 'react';
 import { useDispatch } from 'react-redux';
 import { Container, Row } from 'react-bootstrap';
 import { toast } from 'react-toastify';
+import { useTranslation } from 'react-i18next';
 import 'react-toastify/dist/ReactToastify.css';
 
 import routes from '../routes';
@@ -24,6 +25,7 @@ const getAuthHeader = () => {
 };
 
 const MainPage = () => {
+  const { t } = useTranslation();
   const dispatch = useDispatch();
   useEffect(() => {
     const fetchData = async () => {
@@ -46,11 +48,11 @@ const MainPage = () => {
 
   useEffect(() => {
     function onConnect() {
-      toast.success('связь с сервером установлена');
+      toast.success(t('mainPage.onConnect'));
     }
 
     function onDisconnect() {
-      toast.error('связь с сервером потеряна');
+      toast.success(t('mainPage.onDisconnect'));
     }
 
     function onNewMessageEvent(message) {

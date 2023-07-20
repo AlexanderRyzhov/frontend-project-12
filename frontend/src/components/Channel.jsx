@@ -1,8 +1,10 @@
 import { Button, ButtonGroup, Dropdown } from 'react-bootstrap';
 import { useDispatch } from 'react-redux';
+import { useTranslation } from 'react-i18next';
 import { setCurrentChannelId } from '../slices/uiStateSlice';
 
 const Channel = ({ channel, currentChannel, showModal }) => {
+  const { t } = useTranslation();
   const dispatch = useDispatch();
   const buttonVariant = (channel.id === currentChannel?.id) ? 'secondary' : 'light';
   return (
@@ -20,8 +22,8 @@ const Channel = ({ channel, currentChannel, showModal }) => {
             <>
               <Dropdown.Toggle split variant={buttonVariant} className="rounded-0" />
               <Dropdown.Menu>
-                <Dropdown.Item onClick={() => showModal('removing', channel)}>Удалить</Dropdown.Item>
-                <Dropdown.Item onClick={() => showModal('renaming', channel)}>Переименовать</Dropdown.Item>
+                <Dropdown.Item onClick={() => showModal('removing', channel)}>{t('channel.remove')}</Dropdown.Item>
+                <Dropdown.Item onClick={() => showModal('renaming', channel)}>{t('channel.rename')}</Dropdown.Item>
               </Dropdown.Menu>
             </>
           )
