@@ -19,13 +19,13 @@ export default {
       validation: {
         required: 'обязательное поле',
       },
-      wrongCredentials: 'Неверные имя пользователя или пароль',
-      login: 'Войти',
-      username: 'Логин',
+      username: 'Ваш ник',
       password: 'Пароль',
+      login: 'Войти',
+      wrongCredentials: 'Неверные имя пользователя или пароль',
       noAccountQuestion: 'Нет аккаунта? ',
       signup: 'Регистрация',
-      networkError: 'Ошибка сети, код ошибки: {{code}}',
+      networkError: 'Ошибка соединения',
     },
     messages: {
       messages_zero: 'нет сообщений',
@@ -46,17 +46,17 @@ export default {
       validation: {
         notUniqueUser: 'Такой пользователь уже существует',
         required: 'обязательное поле',
-        min3: 'не меньше 3-х символов',
-        max20: 'не более 20 символов',
-        min6: 'не меньше 6 символов',
-        mustMatch: 'пароли не совпадают',
+        min3: 'От 3 до 20 символов',
+        max20: 'От 3 до 20 символов',
+        min6: 'Не менее 6 символов',
+        mustMatch: 'Пароли должны совпадать',
       },
       signupCaption: 'Регистрация',
       username: 'Имя пользователя',
       password: 'Пароль',
-      passwordConfirmation: 'Повторите пароль',
+      passwordConfirmation: 'Подтвердите пароль',
       signupButton: 'Зарегистрироваться',
-      networkError: 'Ошибка сети, код ошибки: {{code}}',
+      networkError: 'Ошибка соединения',
     },
     modals: {
       add: {
@@ -69,7 +69,7 @@ export default {
         cancel: 'отменить',
         add: 'создать',
         addChannelError: 'не удалось создать канал',
-        addChannelSuccess: 'новый канал создан',
+        addChannelSuccess: 'Канал создан',
       },
       remove: {
         title: 'Удаление канала',
@@ -77,7 +77,7 @@ export default {
         cancel: 'отменить',
         remove: 'удалить',
         removeChannelError: 'не удалось удалить канал',
-        removeChannelSuccess: 'канал удален',
+        removeChannelSuccess: 'Канал удалён',
       },
       rename: {
         validation: {
@@ -89,7 +89,7 @@ export default {
         cancel: 'отменить',
         rename: 'переименовать',
         renameChannelError: 'не удалось переименовать канал',
-        renameChannelSuccess: 'канал успешно переименован',
+        renameChannelSuccess: 'Канал переименован',
       },
     },
   },
