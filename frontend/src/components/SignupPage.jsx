@@ -128,7 +128,7 @@ const SignupPage = () => {
                       </FloatingLabel>
                       <Button
                         variant="success"
-                        as="input"
+                        as="button"
                         type="submit"
                         className="w-100 mb-3"
                         value={t('signupPage.signupButton')}
