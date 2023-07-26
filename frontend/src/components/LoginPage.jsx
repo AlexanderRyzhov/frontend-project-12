@@ -101,12 +101,13 @@ const LoginPage = () => {
                       </FloatingLabel>
                       <Button
                         variant="success"
-                        as="input"
+                        as="button"
                         type="submit"
                         className="w-100 mb-3"
-                        value={t('loginPage.login')}
                         disabled={isSubmitting}
-                      />
+                      >
+                        {t('loginPage.login')}
+                      </Button>
                     </Form>
                   )}
                 </Formik>
