@@ -131,8 +131,9 @@ const SignupPage = () => {
                         as="button"
                         type="submit"
                         className="w-100 mb-3"
-                        value={t('signupPage.signupButton')}
-                      />
+                      >
+                        {t('signupPage.signupButton')}
+                      </Button>
                     </Form>
                   )}
                 </Formik>
