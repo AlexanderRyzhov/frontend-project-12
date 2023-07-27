@@ -9,7 +9,6 @@ function getStorageValue(key, defaultValue) {
 const useLocalStorage = (key, defaultValue = '') => {
   const [value, setValue] = useState(() => getStorageValue(key, defaultValue));
 
-  // eslint-disable-next-line functional/no-expression-statements
   useEffect(() => localStorage.setItem(key, JSON.stringify(value)), [key, value]);
 
   return [value, setValue];
