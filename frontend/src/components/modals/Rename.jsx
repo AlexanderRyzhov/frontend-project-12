@@ -1,7 +1,7 @@
 import React, { useEffect, useRef } from 'react';
 import { Formik } from 'formik';
 import {
-  Modal, FormGroup, FormControl, Button,
+  Modal, FormGroup, FormControl, Button, FloatingLabel,
 } from 'react-bootstrap';
 import { toast } from 'react-toastify';
 import { useTranslation } from 'react-i18next';
@@ -61,21 +61,26 @@ const Rename = ({ hideModal, channels, modalInfo }) => {
           <Modal.Body>
             <form onSubmit={handleSubmit}>
               <FormGroup>
-                <FormControl
-                  ref={inputRef}
-                  name="name"
-                  id="name"
-                  type="text"
-                  placeholder={t('modals.rename.name')}
-                  onChange={handleChange}
-                  onBlur={handleBlur}
-                  value={values.name}
-                  className="mb-2"
-                  disabled={isSubmitting}
-                  isInvalid={touched.name && errors.name}
-                />
-                {errors.name && touched.name
+                <FloatingLabel
+                  controlId="name"
+                  label={t('modals.rename.name')}
+                >
+                  <FormControl
+                    ref={inputRef}
+                    name="name"
+                    id="name"
+                    type="text"
+                    placeholder={t('modals.rename.name')}
+                    onChange={handleChange}
+                    onBlur={handleBlur}
+                    value={values.name}
+                    className="mb-2"
+                    disabled={isSubmitting}
+                    isInvalid={touched.name && errors.name}
+                  />
+                  {errors.name && touched.name
               && <FormControl.Feedback type="invalid">{t(errors.name)}</FormControl.Feedback>}
+                </FloatingLabel>
                 <div className="d-flex justify-content-end">
                   <Button variant="secondary" type="button" onClick={hideModal} className="me-2">
                     {t('modals.rename.cancel')}
