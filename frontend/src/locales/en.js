@@ -6,6 +6,7 @@ export default {
       fetchDataError: 'error ocured during fetch data',
     },
     channel: {
+      manage: 'Manage channel',
       remove: 'Remove',
       rename: 'Rename',
     },

@@ -6,6 +6,7 @@ export default {
       fetchDataError: 'возникла ошибка при загрузке данных',
     },
     channel: {
+      manage: 'Управление каналом',
       remove: 'Удалить',
       rename: 'Переименовать',
     },

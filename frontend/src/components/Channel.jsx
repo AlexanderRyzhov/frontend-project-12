@@ -20,7 +20,9 @@ const Channel = ({ channel, currentChannel, showModal }) => {
         { channel.removable
           ? (
             <>
-              <Dropdown.Toggle split variant={buttonVariant} className="rounded-0" />
+              <Dropdown.Toggle split variant={buttonVariant} className="rounded-0">
+                <span className="visually-hidden">{t('channel.manage')}</span>
+              </Dropdown.Toggle>
               <Dropdown.Menu>
                 <Dropdown.Item onClick={() => showModal('removing', channel)}>{t('channel.remove')}</Dropdown.Item>
                 <Dropdown.Item onClick={() => showModal('renaming', channel)}>{t('channel.rename')}</Dropdown.Item>
