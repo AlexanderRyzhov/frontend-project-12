@@ -4,7 +4,6 @@ import resources from './locales/index.js';
 
 i18next
   .use(initReactI18next)
-  // .use(LanguageDetector) // с помощью плагина определяем язык пользователя в браузере
   .init({
     resources,
     fallbackLng: 'ru',

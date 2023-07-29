@@ -18,15 +18,9 @@ const rollbarConfig = {
   environment: 'dev',
 };
 
-// function TestError() {
-//   const a = null;
-//   return a.hello();
-// }
-
 const App = () => (
   <RollbarProvider config={rollbarConfig}>
     <ErrorBoundary>
-      {/* <TestError /> */}
       <AuthProvider>
         <Provider store={store}>
           <BrowserRouter>

@@ -2,7 +2,6 @@
 import { createSlice } from '@reduxjs/toolkit';
 import { addChannel, removeChannel } from './channelsSlice';
 
-// Начальное значение
 const initialState = {
   defaultChannelId: null,
   currentChannelId: null,

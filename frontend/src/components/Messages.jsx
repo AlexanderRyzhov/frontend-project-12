@@ -1,4 +1,3 @@
-/* eslint-disable max-len */
 import { useSelector } from 'react-redux';
 import { Col } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
@@ -7,7 +6,8 @@ import NewMessageForm from './NewMessageForm';
 
 const Messages = () => {
   const { t } = useTranslation();
-  const currentChannelId = useSelector((state) => state.uiState.currentChannelId || state.uiState.defaultChannelId);
+  const currentChannelId = useSelector((state) => state.uiState.currentChannelId
+    || state.uiState.defaultChannelId);
 
   const messages = useSelector((state) => {
     const allMessages = state.messages.ids.map((id) => state.messages.entities[id]);
