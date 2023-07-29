@@ -1,4 +1,5 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
+import { useSelector } from 'react-redux';
 import { toast } from 'react-toastify';
 import { useTranslation } from 'react-i18next';
 import socket from '../socket';
@@ -7,7 +8,14 @@ const NewMessageForm = ({ channelId, username }) => {
   const { t } = useTranslation();
   const [message, setMessage] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const currentChannelId = useSelector((state) => {
+    const id = state.uiState.currentChannelId || state.uiState.defaultChannelId;
+    return id;
+  });
   const inputRef = useRef(null);
+  useEffect(() => {
+    inputRef.current.focus();
+  }, [message, currentChannelId]);
 
   return (
     <div className="mt-auto px-5 py-3">
@@ -22,14 +30,11 @@ const NewMessageForm = ({ channelId, username }) => {
             username,
             channelId,
           }, (err) => {
+            setIsSubmitting(false);
             if (err) {
               toast.error(t('newMessageForm.sendError'));
-              setIsSubmitting(false);
-              inputRef.current.focus();
             } else {
               setMessage('');
-              setIsSubmitting(false);
-              inputRef.current.focus();
             }
           });
         }}
