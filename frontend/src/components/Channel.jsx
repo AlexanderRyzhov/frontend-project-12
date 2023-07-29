@@ -3,13 +3,18 @@ import { useDispatch } from 'react-redux';
 import { useTranslation } from 'react-i18next';
 import { setCurrentChannelId } from '../slices/uiStateSlice';
 
-const Channel = ({ channel, currentChannel, showModal }) => {
+const Channel = ({
+  channel, currentChannel, showModal, currentChannelRef,
+}) => {
   const { t } = useTranslation();
   const dispatch = useDispatch();
   const buttonVariant = (channel.id === currentChannel?.id) ? 'secondary' : 'light';
   return (
-    <li className="nav-item w-100">
-      <Dropdown as={ButtonGroup} className="d-flex">
+    <li className="nav-item w-100" ref={currentChannelRef}>
+      <Dropdown
+        as={ButtonGroup}
+        className="d-flex"
+      >
         <Button
           variant={buttonVariant}
           onClick={() => (dispatch(setCurrentChannelId(channel.id)))}
