@@ -66,7 +66,6 @@ const Add = ({ hideModal, channels }) => {
             <form onSubmit={handleSubmit}>
               <FormGroup>
                 <FloatingLabel
-                  controlId="name"
                   label={t('modals.add.name')}
                 >
                   <FormControl

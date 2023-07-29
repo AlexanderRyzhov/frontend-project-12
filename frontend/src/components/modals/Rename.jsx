@@ -62,7 +62,6 @@ const Rename = ({ hideModal, channels, modalInfo }) => {
             <form onSubmit={handleSubmit}>
               <FormGroup>
                 <FloatingLabel
-                  controlId="name"
                   label={t('modals.rename.name')}
                 >
                   <FormControl
