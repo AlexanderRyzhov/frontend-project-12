@@ -1,3 +1,4 @@
+import { useRef, useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import { Col } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
@@ -21,6 +22,16 @@ const Messages = () => {
   const user = JSON.parse(localStorage.getItem('user'));
   const username = user?.username;
 
+  const messagesEndRef = useRef(null);
+
+  const scrollToBottom = () => {
+    messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+  };
+
+  useEffect(() => {
+    scrollToBottom();
+  }, [messages]);
+
   return (currentChannel)
     ? (
       <Col className="p-0 h-100">
@@ -33,6 +44,7 @@ const Messages = () => {
             {messages.map((message) => (
               <Message key={message.id} message={message} />
             ))}
+            <div ref={messagesEndRef} />
           </div>
           <NewMessageForm channelId={currentChannel.id} username={username} />
         </div>
