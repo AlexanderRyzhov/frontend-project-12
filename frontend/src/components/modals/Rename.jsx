@@ -5,6 +5,8 @@ import {
 } from 'react-bootstrap';
 import { toast } from 'react-toastify';
 import { useTranslation } from 'react-i18next';
+import * as Yup from 'yup';
+
 import socket from '../../socket';
 
 const Rename = ({ hideModal, channels, modalInfo }) => {
@@ -15,25 +17,24 @@ const Rename = ({ hideModal, channels, modalInfo }) => {
     inputRef.current.focus();
   }, []);
 
+  const channelNames = channels.map(({ name }) => name);
+  const ChannelNameSchema = Yup.object().shape({
+    name: Yup.string()
+      .trim()
+      .required('modals.rename.validation.required')
+      .min(3, 'modals.rename.validation.min3')
+      .max(20, 'modals.rename.validation.max20')
+      .notOneOf(channelNames, 'modals.rename.validation.notUniqueName'),
+  });
+
   return (
     <Formik
       initialValues={{ name: channel.name }}
       validateOnBlur={false}
-      validate={(values) => {
-        const errors = {};
-        if (!values.name) {
-          errors.name = 'modals.rename.validation.required';
-        } else {
-          const index = channels.findIndex((item) => (item.name === values.name));
-          if (index >= 0) {
-            errors.name = 'modals.rename.validation.notUniqueName';
-          }
-        }
-        return errors;
-      }}
+      validationSchema={ChannelNameSchema}
       onSubmit={({ name }, { setSubmitting }) => {
         const sendMessageTimeout = 5000;
-        const modifiedChannel = { id: channel.id, name };
+        const modifiedChannel = { id: channel.id, name: name.trim() };
         socket.timeout(sendMessageTimeout).emit('renameChannel', modifiedChannel, (err) => {
           if (err) {
             toast.error(t('modals.rename.renameChannelError'));

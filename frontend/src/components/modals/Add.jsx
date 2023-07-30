@@ -6,6 +6,8 @@ import {
 import { toast } from 'react-toastify';
 import { useDispatch } from 'react-redux';
 import { useTranslation } from 'react-i18next';
+import * as Yup from 'yup';
+
 import { setMyChannelId } from '../../slices/uiStateSlice';
 import socket from '../../socket';
 
@@ -17,25 +19,24 @@ const Add = ({ hideModal, channels }) => {
     inputRef.current.focus();
   }, []);
 
+  const channelNames = channels.map(({ name }) => name);
+  const ChannelNameSchema = Yup.object().shape({
+    name: Yup.string()
+      .trim()
+      .required('modals.add.validation.required')
+      .min(3, 'modals.add.validation.min3')
+      .max(20, 'modals.add.validation.max20')
+      .notOneOf(channelNames, 'modals.add.validation.notUniqueName'),
+  });
+
   return (
     <Formik
       validateOnBlur={false}
       initialValues={{ name: '' }}
-      validate={(values) => {
-        const errors = {};
-        if (!values.name) {
-          errors.name = 'modals.add.validation.required';
-        } else {
-          const index = channels.findIndex((channel) => (channel.name === values.name));
-          if (index >= 0) {
-            errors.name = 'modals.add.validation.notUniqueName';
-          }
-        }
-        return errors;
-      }}
+      validationSchema={ChannelNameSchema}
       onSubmit={({ name }, { setSubmitting }) => {
         const sendMessageTimeout = 5000;
-        const channel = { name };
+        const channel = { name: name.trim() };
         socket.timeout(sendMessageTimeout).emit('newChannel', channel, (err, response) => {
           if (err) {
             toast.error(t('modals.add.addChannelError'));

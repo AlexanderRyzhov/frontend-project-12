@@ -64,6 +64,8 @@ export default {
         validation: {
           required: 'Name is required',
           notUniqueName: 'Name is already in use',
+          min3: 'at least 3 characters',
+          max20: 'not more then 20 characters',
         },
         title: 'New channel',
         name: 'name',
@@ -84,6 +86,8 @@ export default {
         validation: {
           required: 'Name is required',
           notUniqueName: 'Name is already in use',
+          min3: 'at least 3 characters',
+          max20: 'not more then 20 characters',
         },
         title: 'Rename channel',
         name: 'name',
