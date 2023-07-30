@@ -14,8 +14,8 @@ import { AuthProvider } from './contexts/AuthContext.jsx';
 import store from './slices/index.js';
 
 const rollbarConfig = {
-  accessToken: 'a1135da28f624efd87a3ea30b66f86ba',
-  environment: 'dev',
+  accessToken: process.env.REACT_APP_ROLLBAR_ACCESS_TOKEN,
+  environment: process.env.REACT_APP_ROLLBAR_ENVIROMENT,
 };
 
 const App = () => (
