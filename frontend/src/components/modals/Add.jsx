@@ -68,6 +68,7 @@ const Add = ({ hideModal, channels }) => {
               <FormGroup>
                 <FloatingLabel
                   label={t('modals.add.name')}
+                  controlId="name"
                 >
                   <FormControl
                     ref={inputRef}
