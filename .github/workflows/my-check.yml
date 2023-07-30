@@ -1,0 +1,19 @@
+name: my-check
+on: push
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      # Клонируем репозиторий
+      - uses: actions/checkout@v3
+      # Устанавливаем Node.js
+      - uses: actions/setup-node@v3
+        with:
+          node-version: '16.x'
+          cache: 'npm' # ускоряет повторные сборки
+      # Ставим зависимости
+      - run: npm install
+      # Запуск lint
+      - name: run lint
+        run: make lint
+        
