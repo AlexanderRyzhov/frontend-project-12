@@ -12,6 +12,7 @@ import RequireAuth from './components/RequireAuth.jsx';
 import SignupPage from './components/SignupPage';
 import { AuthProvider } from './contexts/AuthContext.jsx';
 import store from './slices/index.js';
+import routes from './routes';
 
 const rollbarConfig = {
   accessToken: process.env.REACT_APP_ROLLBAR_ACCESS_TOKEN,
@@ -25,10 +26,10 @@ const App = () => (
         <Provider store={store}>
           <BrowserRouter>
             <Routes>
-              <Route path="/" element={<Layout />}>
-                <Route path="/" element={<RequireAuth><MainPage /></RequireAuth>} />
-                <Route path="login" element={<LoginPage />} />
-                <Route path="signup" element={<SignupPage />} />
+              <Route path={routes.rootPage()} element={<Layout />}>
+                <Route path={routes.rootPage()} element={<RequireAuth><MainPage /></RequireAuth>} />
+                <Route path={routes.loginPage()} element={<LoginPage />} />
+                <Route path={routes.signupPage()} element={<SignupPage />} />
                 <Route path="*" element={<NotFoundPage />} />
               </Route>
             </Routes>

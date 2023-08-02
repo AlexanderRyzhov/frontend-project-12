@@ -10,7 +10,7 @@ import { useTranslation } from 'react-i18next';
 import * as Yup from 'yup';
 
 import { useAuthContext } from '../contexts/AuthContext';
-
+import routes from '../routes';
 import loginImage from '../assets/login.png';
 
 const LoginSchema = Yup.object().shape({
@@ -40,7 +40,7 @@ const LoginPage = () => {
                   onSubmit={async (values) => {
                     try {
                       await auth.signIn(values);
-                      return navigate('/');
+                      return navigate(routes.rootPage());
                     } catch (error) {
                       if (axios.isAxiosError(error)) {
                         const { code, response } = error;

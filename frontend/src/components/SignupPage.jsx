@@ -10,6 +10,7 @@ import * as Yup from 'yup';
 
 import { useAuthContext } from '../contexts/AuthContext';
 import signupImage from '../assets/signup.png';
+import routes from '../routes';
 
 const SignupSchema = Yup.object().shape({
   username: Yup.string()
@@ -51,7 +52,7 @@ const SignupPage = () => {
                   onSubmit={async (values, { setFieldValue }) => {
                     try {
                       await auth.signUp(values);
-                      return navigate('/');
+                      return navigate(routes.rootPage());
                     } catch (error) {
                       if (axios.isAxiosError(error)) {
                         const { code, response } = error;
