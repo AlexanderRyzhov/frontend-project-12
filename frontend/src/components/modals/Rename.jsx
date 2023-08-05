@@ -60,13 +60,13 @@ const Rename = ({ hideModal, channels, modalInfo }) => {
           </Modal.Header>
           <Modal.Body>
             <form onSubmit={handleSubmit}>
-              <FormGroup controlId="name">
+              <FormGroup>
                 <FloatingLabel
                   label={t('modals.rename.name')}
+                  controlId="name"
                 >
                   <FormControl
                     ref={inputRef}
-                    name="name"
                     type="text"
                     placeholder={t('modals.rename.name')}
                     onChange={handleChange}

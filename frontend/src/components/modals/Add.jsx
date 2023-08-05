@@ -64,13 +64,13 @@ const Add = ({ hideModal, channels }) => {
           </Modal.Header>
           <Modal.Body>
             <form onSubmit={handleSubmit}>
-              <FormGroup controlId="name">
+              <FormGroup>
                 <FloatingLabel
                   label={t('modals.add.name')}
+                  controlId="name"
                 >
                   <FormControl
                     ref={inputRef}
-                    name="name"
                     type="text"
                     placeholder={t('modals.add.name')}
                     onChange={handleChange}
