@@ -7,7 +7,7 @@ import { useSocket } from '../contexts/SocketContext';
 
 const NewMessageForm = ({ channelId, username }) => {
   const { t } = useTranslation();
-  const socket = useSocket();
+  const api = useSocket();
   const [message, setMessage] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
   const currentChannelId = useSelector((state) => {
@@ -23,22 +23,22 @@ const NewMessageForm = ({ channelId, username }) => {
     <div className="mt-auto px-5 py-3">
       <form
         className="py-1 border rounded-2"
-        onSubmit={(event) => {
+        onSubmit={async (event) => {
           event.preventDefault();
           setIsSubmitting(true);
-          const sendMessageTimeout = 5000;
-          socket.timeout(sendMessageTimeout).emit('newMessage', {
+          const newMessage = {
             body: message,
             username,
             channelId,
-          }, (err) => {
-            setIsSubmitting(false);
-            if (err) {
-              toast.error(t('newMessageForm.sendError'));
-            } else {
-              setMessage('');
-            }
-          });
+          };
+          try {
+            await api.newMessage(newMessage);
+            setMessage('');
+          } catch (err) {
+            toast.error(t('newMessageForm.sendError'));
+            console.log(err);
+          }
+          setIsSubmitting(false);
         }}
       >
         <div className="input-group has-validation">

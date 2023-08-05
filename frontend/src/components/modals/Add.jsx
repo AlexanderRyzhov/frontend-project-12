@@ -9,13 +9,13 @@ import { useTranslation } from 'react-i18next';
 import * as Yup from 'yup';
 
 import { setMyChannelId } from '../../slices/uiStateSlice';
-import { useSocket } from '../../contexts/SocketContext';
+import { useSocketApi } from '../../contexts/SocketContext';
 
 const Add = ({ hideModal, channels }) => {
   const { t } = useTranslation();
   const dispatch = useDispatch();
   const inputRef = useRef(null);
-  const socket = useSocket();
+  const api = useSocketApi();
 
   useEffect(() => {
     inputRef.current.focus();
@@ -36,20 +36,17 @@ const Add = ({ hideModal, channels }) => {
       validateOnBlur={false}
       initialValues={{ name: '' }}
       validationSchema={ChannelNameSchema}
-      onSubmit={({ name }, { setSubmitting }) => {
-        const sendMessageTimeout = 5000;
-        const channel = { name: name.trim() };
-        socket.timeout(sendMessageTimeout).emit('newChannel', channel, (err, response) => {
-          if (err) {
-            toast.error(t('modals.add.addChannelError'));
-            setSubmitting(false);
-          } else {
-            const { data } = response;
-            toast.success(t('modals.add.addChannelSuccess'));
-            dispatch(setMyChannelId(data.id));
-            hideModal();
-          }
-        });
+      onSubmit={async ({ name }, { setSubmitting }) => {
+        try {
+          const channel = { name: name.trim() };
+          const { data } = await api.newChannel(channel);
+          dispatch(setMyChannelId(data.id));
+          toast.success(t('modals.add.addChannelSuccess'));
+          hideModal();
+        } catch (err) {
+          toast.error(t('modals.add.addChannelError'));
+          setSubmitting(false);
+        }
       }}
     >
       {({

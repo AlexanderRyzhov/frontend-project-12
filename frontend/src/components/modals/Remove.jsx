@@ -3,11 +3,11 @@ import {
 } from 'react-bootstrap';
 import { toast } from 'react-toastify';
 import { useTranslation } from 'react-i18next';
-import { useSocket } from '../../contexts/SocketContext';
+import { useSocketApi } from '../../contexts/SocketContext';
 
 const Remove = ({ hideModal, modalInfo }) => {
   const { t } = useTranslation();
-  const socket = useSocket();
+  const api = useSocketApi();
   const { channel } = modalInfo;
   return (
     <Modal show centered onHide={hideModal}>
@@ -18,15 +18,13 @@ const Remove = ({ hideModal, modalInfo }) => {
         <form
           onSubmit={(e) => {
             e.preventDefault();
-            const sendMessageTimeout = 5000;
-            socket.timeout(sendMessageTimeout).emit('removeChannel', channel, (err) => {
-              if (err) {
-                toast.error(t('modals.remove.removeChannelError'));
-              } else {
-                toast.success(t('modals.remove.removeChannelSuccess'));
-                hideModal();
-              }
-            });
+            try {
+              api.removeChannel(channel);
+              toast.success(t('modals.remove.removeChannelSuccess'));
+              hideModal();
+            } catch (err) {
+              toast.error(t('modals.remove.removeChannelError'));
+            }
           }}
         >
           <FormGroup>

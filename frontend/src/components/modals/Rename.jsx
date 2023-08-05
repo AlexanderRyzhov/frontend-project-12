@@ -7,11 +7,11 @@ import { toast } from 'react-toastify';
 import { useTranslation } from 'react-i18next';
 import * as Yup from 'yup';
 
-import { useSocket } from '../../contexts/SocketContext';
+import { useSocketApi } from '../../contexts/SocketContext';
 
 const Rename = ({ hideModal, channels, modalInfo }) => {
   const { t } = useTranslation();
-  const socket = useSocket();
+  const api = useSocketApi();
   const { channel } = modalInfo;
   const inputRef = useRef(null);
   useEffect(() => {
@@ -34,17 +34,15 @@ const Rename = ({ hideModal, channels, modalInfo }) => {
       validateOnBlur={false}
       validationSchema={ChannelNameSchema}
       onSubmit={({ name }, { setSubmitting }) => {
-        const sendMessageTimeout = 5000;
-        const modifiedChannel = { id: channel.id, name: name.trim() };
-        socket.timeout(sendMessageTimeout).emit('renameChannel', modifiedChannel, (err) => {
-          if (err) {
-            toast.error(t('modals.rename.renameChannelError'));
-            setSubmitting(false);
-          } else {
-            toast.success(t('modals.rename.renameChannelSuccess'));
-            hideModal();
-          }
-        });
+        try {
+          const modifiedChannel = { id: channel.id, name: name.trim() };
+          api.renameChannel(modifiedChannel);
+          toast.success(t('modals.rename.renameChannelSuccess'));
+          hideModal();
+        } catch (err) {
+          toast.error(t('modals.rename.renameChannelError'));
+          setSubmitting(false);
+        }
       }}
     >
       {({

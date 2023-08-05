@@ -4,6 +4,7 @@ import React, {
   useRef,
   useEffect,
   useState,
+  useMemo,
 } from 'react';
 import { toast } from 'react-toastify';
 import { useTranslation } from 'react-i18next';
@@ -72,11 +73,28 @@ export const SocketProvider = ({ children, store }) => {
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
+  const sendMessageTimeout = 5000;
+
+  const api = useMemo(() => ({
+    newMessage: (newMessage) => socket.current
+      .timeout(sendMessageTimeout)
+      .emitWithAck('newMessage', newMessage),
+    newChannel: (newChannel) => (socket.current
+      .timeout(sendMessageTimeout)
+      .emitWithAck('newChannel', newChannel)),
+    removeChannel: (channel) => (socket.current
+      .timeout(sendMessageTimeout)
+      .emitWithAck('removeChannel', channel)),
+    renameChannel: (modifiedChannel) => (socket.current
+      .timeout(sendMessageTimeout)
+      .emitWithAck('renameChannel', modifiedChannel)),
+  }), []);
+
   return (
-    <SocketContext.Provider value={socket.current}>
+    <SocketContext.Provider value={api}>
       {children}
     </SocketContext.Provider>
   );
 };
 
-export const useSocket = () => useContext(SocketContext);
+export const useSocketApi = () => useContext(SocketContext);
