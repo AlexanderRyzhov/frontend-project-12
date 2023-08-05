@@ -2,10 +2,12 @@ import React, { useState, useRef, useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import { toast } from 'react-toastify';
 import { useTranslation } from 'react-i18next';
-import socket from '../socket';
+
+import { useSocket } from '../contexts/SocketContext';
 
 const NewMessageForm = ({ channelId, username }) => {
   const { t } = useTranslation();
+  const socket = useSocket();
   const [message, setMessage] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
   const currentChannelId = useSelector((state) => {

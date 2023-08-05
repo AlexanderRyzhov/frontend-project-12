@@ -7,10 +7,11 @@ import { toast } from 'react-toastify';
 import { useTranslation } from 'react-i18next';
 import * as Yup from 'yup';
 
-import socket from '../../socket';
+import { useSocket } from '../../contexts/SocketContext';
 
 const Rename = ({ hideModal, channels, modalInfo }) => {
   const { t } = useTranslation();
+  const socket = useSocket();
   const { channel } = modalInfo;
   const inputRef = useRef(null);
   useEffect(() => {

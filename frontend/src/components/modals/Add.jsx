@@ -9,12 +9,14 @@ import { useTranslation } from 'react-i18next';
 import * as Yup from 'yup';
 
 import { setMyChannelId } from '../../slices/uiStateSlice';
-import socket from '../../socket';
+import { useSocket } from '../../contexts/SocketContext';
 
 const Add = ({ hideModal, channels }) => {
   const { t } = useTranslation();
   const dispatch = useDispatch();
   const inputRef = useRef(null);
+  const socket = useSocket();
+
   useEffect(() => {
     inputRef.current.focus();
   }, []);

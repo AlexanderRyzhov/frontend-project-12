@@ -3,10 +3,11 @@ import {
 } from 'react-bootstrap';
 import { toast } from 'react-toastify';
 import { useTranslation } from 'react-i18next';
-import socket from '../../socket';
+import { useSocket } from '../../contexts/SocketContext';
 
 const Remove = ({ hideModal, modalInfo }) => {
   const { t } = useTranslation();
+  const socket = useSocket();
   const { channel } = modalInfo;
   return (
     <Modal show centered onHide={hideModal}>

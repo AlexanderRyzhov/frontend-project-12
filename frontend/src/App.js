@@ -13,6 +13,7 @@ import SignupPage from './components/SignupPage';
 import { AuthProvider } from './contexts/AuthContext.jsx';
 import store from './slices/index.js';
 import routes from './routes';
+import { SocketProvider } from './contexts/SocketContext';
 
 const rollbarConfig = {
   accessToken: process.env.REACT_APP_ROLLBAR_ACCESS_TOKEN,
@@ -24,16 +25,21 @@ const App = () => (
     <ErrorBoundary>
       <AuthProvider>
         <Provider store={store}>
-          <BrowserRouter>
-            <Routes>
-              <Route path={routes.rootPage()} element={<Layout />}>
-                <Route path={routes.rootPage()} element={<RequireAuth><MainPage /></RequireAuth>} />
-                <Route path={routes.loginPage()} element={<LoginPage />} />
-                <Route path={routes.signupPage()} element={<SignupPage />} />
-                <Route path="*" element={<NotFoundPage />} />
-              </Route>
-            </Routes>
-          </BrowserRouter>
+          <SocketProvider store={store}>
+            <BrowserRouter>
+              <Routes>
+                <Route path={routes.rootPage()} element={<Layout />}>
+                  <Route
+                    path={routes.rootPage()}
+                    element={<RequireAuth><MainPage /></RequireAuth>}
+                  />
+                  <Route path={routes.loginPage()} element={<LoginPage />} />
+                  <Route path={routes.signupPage()} element={<SignupPage />} />
+                  <Route path="*" element={<NotFoundPage />} />
+                </Route>
+              </Routes>
+            </BrowserRouter>
+          </SocketProvider>
         </Provider>
       </AuthProvider>
     </ErrorBoundary>
