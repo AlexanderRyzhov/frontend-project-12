@@ -3,13 +3,18 @@ import { Formik } from 'formik';
 import {
   Modal, FormGroup, FormControl, Button, FloatingLabel,
 } from 'react-bootstrap';
+import { useSelector } from 'react-redux';
 import { toast } from 'react-toastify';
 import { useTranslation } from 'react-i18next';
 import * as Yup from 'yup';
 
 import { useSocketApi } from '../../contexts/SocketContext';
 
-const Rename = ({ hideModal, channels, modalInfo }) => {
+const Rename = ({ modalInfo, hideModal }) => {
+  const channels = useSelector((state) => {
+    const allChannels = state.channels.ids.map((id) => state.channels.entities[id]);
+    return allChannels;
+  });
   const { t } = useTranslation();
   const api = useSocketApi();
   const { channel } = modalInfo;

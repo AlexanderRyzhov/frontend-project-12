@@ -6,10 +6,11 @@ const initialState = {
   defaultChannelId: null,
   currentChannelId: null,
   myChannelId: null,
+  modalInfo: { type: null, channel: null },
 };
 
-const channelsSlice = createSlice({
-  name: 'channel',
+const uiStateSlice = createSlice({
+  name: 'uiState',
   initialState,
   reducers: {
     setDefaultChannelId(state, action) {
@@ -23,6 +24,10 @@ const channelsSlice = createSlice({
     setMyChannelId(state, action) {
       const myChannelId = action.payload;
       state.myChannelId = myChannelId;
+    },
+    setModalInfo(state, action) {
+      const modalInfo = action.payload;
+      state.modalInfo = modalInfo;
     },
   },
   extraReducers: (builder) => {
@@ -46,6 +51,7 @@ export const {
   setCurrentChannelId,
   setMyChannelId,
   setDefaultChannelId,
-} = channelsSlice.actions;
+  setModalInfo,
+} = uiStateSlice.actions;
 
-export default channelsSlice.reducer;
+export default uiStateSlice.reducer;

@@ -1,31 +1,18 @@
-import { useState, useRef, useEffect } from 'react';
-import { useSelector } from 'react-redux';
+import { useRef, useEffect } from 'react';
+import { useSelector, useDispatch } from 'react-redux';
 import { Button, Col } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
 import Channel from './Channel';
-import getModal from './modals/index';
-
-const renderModal = (modalInfo, hideModal, channels) => {
-  if (modalInfo.type === null) {
-    return null;
-  }
-  const ModalDialog = getModal(modalInfo.type);
-  return (
-    <ModalDialog
-      modalInfo={modalInfo}
-      hideModal={hideModal}
-      channels={channels}
-    />
-  );
-};
+import { setModalInfo } from '../slices/uiStateSlice';
+import ModalDialog from './modals/ModalDialog';
 
 const Channels = () => {
   const { t } = useTranslation();
-  const [modalInfo, setModalInfo] = useState({ type: null, channel: null });
+
+  const dispatch = useDispatch();
   const showModal = (type, channel = null) => {
-    setModalInfo({ type, channel });
+    dispatch(setModalInfo({ type, channel }));
   };
-  const hideModal = () => setModalInfo({ type: null, channel: null });
 
   const channels = useSelector((state) => {
     const allChannels = state.channels.ids.map((id) => state.channels.entities[id]);
@@ -69,7 +56,7 @@ const Channels = () => {
           />
         ))}
       </ul>
-      {renderModal(modalInfo, hideModal, channels)}
+      <ModalDialog />
     </Col>
   );
 };

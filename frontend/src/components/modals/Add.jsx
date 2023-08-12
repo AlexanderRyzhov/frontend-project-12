@@ -4,14 +4,18 @@ import {
   Modal, FormGroup, FormControl, Button, FloatingLabel,
 } from 'react-bootstrap';
 import { toast } from 'react-toastify';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { useTranslation } from 'react-i18next';
 import * as Yup from 'yup';
 
 import { setMyChannelId } from '../../slices/uiStateSlice';
 import { useSocketApi } from '../../contexts/SocketContext';
 
-const Add = ({ hideModal, channels }) => {
+const Add = ({ hideModal }) => {
+  const channels = useSelector((state) => {
+    const allChannels = state.channels.ids.map((id) => state.channels.entities[id]);
+    return allChannels;
+  });
   const { t } = useTranslation();
   const dispatch = useDispatch();
   const inputRef = useRef(null);
