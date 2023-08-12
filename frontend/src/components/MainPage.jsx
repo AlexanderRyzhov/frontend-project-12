@@ -22,7 +22,7 @@ const getAuthHeader = (user) => {
 };
 
 const MainPage = () => {
-  const { user } = useAuthContext();
+  const { user, signOut } = useAuthContext();
   const { t } = useTranslation();
   const dispatch = useDispatch();
 
@@ -38,6 +38,10 @@ const MainPage = () => {
         dispatch(setDefaultChannelId(currentChannelId));
         dispatch(setMessages(messages));
       } catch (error) {
+        const unauthorized = 401;
+        if (error.name === 'AxiosError' && error.response.status === unauthorized) {
+          signOut();
+        }
         console.log(error);
         toast.error(t('mainPage.fetchDataError'));
       }
