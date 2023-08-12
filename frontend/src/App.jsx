@@ -13,19 +13,19 @@ import SignupPage from './components/SignupPage';
 import { AuthProvider } from './contexts/AuthContext.jsx';
 import store from './slices/index.js';
 import routes from './routes';
-import { SocketProvider } from './contexts/SocketContext';
+import { SocketApiProvider } from './contexts/SocketContext';
 
 const rollbarConfig = {
   accessToken: process.env.REACT_APP_ROLLBAR_ACCESS_TOKEN,
   environment: process.env.REACT_APP_ROLLBAR_ENVIROMENT,
 };
 
-const App = () => (
+const App = ({ socket }) => (
   <RollbarProvider config={rollbarConfig}>
     <ErrorBoundary>
       <AuthProvider>
         <Provider store={store}>
-          <SocketProvider store={store}>
+          <SocketApiProvider socket={socket}>
             <BrowserRouter>
               <Routes>
                 <Route path={routes.rootPage()} element={<Layout />}>
@@ -39,7 +39,7 @@ const App = () => (
                 </Route>
               </Routes>
             </BrowserRouter>
-          </SocketProvider>
+          </SocketApiProvider>
         </Provider>
       </AuthProvider>
     </ErrorBoundary>
