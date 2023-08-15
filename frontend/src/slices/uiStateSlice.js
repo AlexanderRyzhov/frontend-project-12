@@ -3,7 +3,6 @@ import { createSlice } from '@reduxjs/toolkit';
 import { addChannel, removeChannel } from './channelsSlice';
 
 const initialState = {
-  defaultChannelId: null,
   currentChannelId: null,
   myChannelId: null,
   modalInfo: { type: null, channel: null },
@@ -13,10 +12,6 @@ const uiStateSlice = createSlice({
   name: 'uiState',
   initialState,
   reducers: {
-    setDefaultChannelId(state, action) {
-      const defaultChannelId = action.payload;
-      state.defaultChannelId = defaultChannelId;
-    },
     setCurrentChannelId(state, action) {
       const currentChannelId = action.payload;
       state.currentChannelId = currentChannelId;
@@ -50,7 +45,6 @@ const uiStateSlice = createSlice({
 export const {
   setCurrentChannelId,
   setMyChannelId,
-  setDefaultChannelId,
   setModalInfo,
 } = uiStateSlice.actions;
 

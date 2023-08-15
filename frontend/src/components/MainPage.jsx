@@ -11,8 +11,8 @@ import Messages from './Messages';
 import routes from '../routes';
 import { useAuthContext } from '../contexts/AuthContext';
 import { setChannels } from '../slices/channelsSlice';
-import { setDefaultChannelId } from '../slices/uiStateSlice';
 import { setMessages } from '../slices/messagesSlice';
+import { setCurrentChannelId } from '../slices/uiStateSlice';
 
 const getAuthHeader = (user) => {
   if (user && user.token) {
@@ -35,7 +35,7 @@ const MainPage = () => {
         const { data } = await axios.get(routes.getData(), config);
         const { channels, messages, currentChannelId } = data;
         dispatch(setChannels(channels));
-        dispatch(setDefaultChannelId(currentChannelId));
+        dispatch(setCurrentChannelId(currentChannelId));
         dispatch(setMessages(messages));
       } catch (error) {
         const unauthorized = 401;

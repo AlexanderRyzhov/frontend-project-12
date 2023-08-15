@@ -19,7 +19,7 @@ const Channels = () => {
     return allChannels;
   });
   const currentChannel = useSelector((state) => {
-    const id = state.uiState.currentChannelId || state.uiState.defaultChannelId;
+    const id = state.uiState.currentChannelId || 0;
     return state.channels.entities[id];
   });
 

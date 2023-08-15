@@ -7,8 +7,7 @@ import NewMessageForm from './NewMessageForm';
 
 const Messages = () => {
   const { t } = useTranslation();
-  const currentChannelId = useSelector((state) => state.uiState.currentChannelId
-    || state.uiState.defaultChannelId);
+  const currentChannelId = useSelector((state) => state.uiState.currentChannelId ?? 0);
 
   const messages = useSelector((state) => {
     const allMessages = state.messages.ids.map((id) => state.messages.entities[id]);

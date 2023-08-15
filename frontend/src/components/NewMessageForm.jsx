@@ -10,10 +10,7 @@ const NewMessageForm = ({ channelId, username }) => {
   const api = useSocketApi();
   const [message, setMessage] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const currentChannelId = useSelector((state) => {
-    const id = state.uiState.currentChannelId || state.uiState.defaultChannelId;
-    return id;
-  });
+  const currentChannelId = useSelector((state) => state.uiState.currentChannelId ?? 0);
   const inputRef = useRef(null);
   useEffect(() => {
     inputRef.current.focus();
