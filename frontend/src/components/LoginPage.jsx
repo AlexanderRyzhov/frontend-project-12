@@ -115,7 +115,7 @@ const LoginPage = () => {
             </Card.Body>
             <Card.Footer className="text-muted p-4">
               {t('loginPage.noAccountQuestion')}
-              <NavLink to="/signup">{t('loginPage.signup')}</NavLink>
+              <NavLink to={routes.signupPage()}>{t('loginPage.signup')}</NavLink>
             </Card.Footer>
           </Card>
         </Col>
