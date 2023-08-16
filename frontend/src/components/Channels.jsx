@@ -3,7 +3,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import { Button, Col } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
 import Channel from './Channel';
-import { setModalInfo } from '../slices/uiStateSlice';
+import { setModalInfo } from '../slices/modalsSlice';
 import ModalDialog from './modals/ModalDialog';
 
 const Channels = () => {
@@ -19,7 +19,8 @@ const Channels = () => {
     return allChannels;
   });
   const currentChannel = useSelector((state) => {
-    const id = state.uiState.currentChannelId || 0;
+    const [defaultId] = state.channels.ids;
+    const id = state.channels.currentChannelId ?? defaultId;
     return state.channels.entities[id];
   });
 

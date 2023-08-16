@@ -10,9 +10,8 @@ import Channels from './Channels';
 import Messages from './Messages';
 import routes from '../routes';
 import { useAuthContext } from '../contexts/AuthContext';
-import { setChannels } from '../slices/channelsSlice';
+import { setChannels, setCurrentChannelId } from '../slices/channelsSlice';
 import { setMessages } from '../slices/messagesSlice';
-import { setCurrentChannelId } from '../slices/uiStateSlice';
 
 const getAuthHeader = (user) => {
   if (user && user.token) {

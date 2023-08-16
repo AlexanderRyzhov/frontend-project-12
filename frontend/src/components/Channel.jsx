@@ -1,7 +1,7 @@
 import { Button, ButtonGroup, Dropdown } from 'react-bootstrap';
 import { useDispatch } from 'react-redux';
 import { useTranslation } from 'react-i18next';
-import { setCurrentChannelId } from '../slices/uiStateSlice';
+import { setCurrentChannelId } from '../slices/channelsSlice';
 
 const Channel = ({
   channel, currentChannel, showModal, currentChannelRef,

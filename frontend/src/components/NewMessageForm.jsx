@@ -4,13 +4,15 @@ import { toast } from 'react-toastify';
 import { useTranslation } from 'react-i18next';
 
 import { useSocketApi } from '../contexts/SocketContext';
+import { useAuthContext } from '../contexts/AuthContext';
 
-const NewMessageForm = ({ channelId, username }) => {
+const NewMessageForm = ({ channelId }) => {
   const { t } = useTranslation();
+  const { user: { username } } = useAuthContext();
   const api = useSocketApi();
   const [message, setMessage] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const currentChannelId = useSelector((state) => state.uiState.currentChannelId ?? 0);
+  const currentChannelId = useSelector((state) => state.channels.currentChannelId ?? 0);
   const inputRef = useRef(null);
   useEffect(() => {
     inputRef.current.focus();

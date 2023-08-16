@@ -7,22 +7,19 @@ import NewMessageForm from './NewMessageForm';
 
 const Messages = () => {
   const { t } = useTranslation();
-  const currentChannelId = useSelector((state) => state.uiState.currentChannelId ?? 0);
+
+  const currentChannel = useSelector((state) => {
+    const [defaultId] = state.channels.ids;
+    const id = state.channels.currentChannelId ?? defaultId;
+    return state.channels.entities[id];
+  });
 
   const messages = useSelector((state) => {
     const allMessages = state.messages.ids.map((id) => state.messages.entities[id]);
-    return allMessages.filter(({ channelId }) => channelId === currentChannelId);
+    return allMessages.filter(({ channelId }) => channelId === currentChannel.id);
   });
 
-  const currentChannel = useSelector((state) => (
-    state.channels.entities[currentChannelId]
-  ));
-
-  const user = JSON.parse(localStorage.getItem('user'));
-  const username = user?.username;
-
   const messagesEndRef = useRef(null);
-
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'auto' });
   };
@@ -45,7 +42,7 @@ const Messages = () => {
             ))}
             <div ref={messagesEndRef} />
           </div>
-          <NewMessageForm channelId={currentChannel.id} username={username} />
+          <NewMessageForm channelId={currentChannel.id} />
         </div>
       </Col>
     )

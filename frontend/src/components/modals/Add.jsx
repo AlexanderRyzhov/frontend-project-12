@@ -8,7 +8,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useTranslation } from 'react-i18next';
 import * as Yup from 'yup';
 
-import { setMyChannelId } from '../../slices/uiStateSlice';
+import { setMyChannelId } from '../../slices/channelsSlice';
 import { useSocketApi } from '../../contexts/SocketContext';
 
 const Add = ({ hideModal }) => {
