@@ -27,7 +27,6 @@ const Channels = () => {
   const currentChannelRef = useRef(null);
 
   const scrollToCurrentChannel = () => {
-    console.log(currentChannelRef);
     currentChannelRef.current?.scrollIntoView({ behavior: 'auto' });
   };
 
